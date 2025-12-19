@@ -9,31 +9,17 @@
 	const client = TwitchClient.client;
 </script>
 
-<div class="div">
-	params?: {urlParams.params}
-</div>
-<div class="div">
-	id?: {urlParams.id}
-</div>
-<div class="div">
-	channel?: {urlParams.channel}
-</div>
-
-<div class="div">
-	channelValid?: {urlParams.channelValid}
-</div>
-
 {#if !urlParams.channelValid}
 	<h2>Channel url parameter missing!</h2>
 	<div>Please add '?twitch=exampleTwitchChannel' to the URL</div>
 {:else}
-	{#if client != null}
-		<div>CLIENT</div>
-	{:else}
-		<div>NO CLIENT</div>
-	{/if}
-
 	<Widget></Widget>
 {/if}
 
-<style></style>
+<style>
+	:global(body) {
+		background-color: #1a1a1a;
+		color: white;
+		font-family: 'Roboto Mono', monospace;
+	}
+</style>
