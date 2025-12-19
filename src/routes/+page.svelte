@@ -1,12 +1,39 @@
 <script lang="ts">
-    import Widget from './widget.svelte'
+	import { TwitchClient } from '../state/twitchclient.svelte';
+	import { UrlParamsStore } from '../state/urlparams.svelte';
+	import Widget from './widget.svelte';
 
-    let dockMode = false;
+	let dockMode = false;
+
+	const urlParams = UrlParamsStore;
+	const client = TwitchClient.client;
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<div class="div">
+	params?: {urlParams.params}
+</div>
+<div class="div">
+	id?: {urlParams.id}
+</div>
+<div class="div">
+	channel?: {urlParams.channel}
+</div>
 
-<Widget></Widget>
+<div class="div">
+	channelValid?: {urlParams.channelValid}
+</div>
+
+{#if !urlParams.channelValid}
+	<h2>Channel url parameter missing!</h2>
+	<div>Please add '?twitch=exampleTwitchChannel' to the URL</div>
+{:else}
+	{#if client != null}
+		<div>CLIENT</div>
+	{:else}
+		<div>NO CLIENT</div>
+	{/if}
+
+	<Widget></Widget>
+{/if}
 
 <style></style>
