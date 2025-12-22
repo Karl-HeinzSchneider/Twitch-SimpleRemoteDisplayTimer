@@ -37,7 +37,7 @@ export class UrlParamsState {
     displayPrefix = $derived.by(() => {
         const displayValue = this.params.get('prefixDisplay')
         if (displayValue && displayValue != '') {
-            return displayValue;
+            return displayValue.toLowerCase();
         }
         else {
             return 'display'; // default
@@ -47,7 +47,7 @@ export class UrlParamsState {
     smallPrefix = $derived.by(() => {
         const smallValue = this.params.get('prefix')
         if (smallValue && smallValue != '') {
-            return smallValue;
+            return smallValue.toLowerCase();
         }
         else {
             return 'timer'; // default
@@ -57,7 +57,7 @@ export class UrlParamsState {
     bigPrefix = $derived.by(() => {
         const bigValue = this.params.get('prefix2')
         if (bigValue && bigValue != '') {
-            return bigValue;
+            return bigValue.toLowerCase();
         }
         else {
             return 'bigtimer'; // default

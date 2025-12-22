@@ -59,6 +59,10 @@ export class AppState {
         this.state.smallTimer = updateTimer(this.state.smallTimer)
         this.state.bigTimer = updateTimer(this.state.bigTimer)
     }
+
+    updateHeaderText(newHeader: Partial<TextState>) {
+        this.state.header = { ...this.state.header, ...newHeader }
+    }
 }
 
 function updateTimer(timer: TimerState): TimerState {

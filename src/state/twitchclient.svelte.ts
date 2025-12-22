@@ -4,10 +4,6 @@ import { AppStore } from "./app.svelte";
 const paramStore = UrlParamsStore
 const appStore = AppStore;
 
-// const channel = "karlheinz_schneider";
-// const prefix = "!" + "timer";
-const onlyModsCanEdit = true;
-
 export class TwitchClientState {
     clientInternal: null | tmi.Client = $state(null);
     client = $derived.by(() => {
@@ -17,7 +13,7 @@ export class TwitchClientState {
                 const clientOptions = { options: { debug: true }, channels: [paramStore.channel!] };
                 this.clientInternal = new tmi.Client(clientOptions)
 
-                this.clientInternal.addListener("message", this.handleChat);
+                this.clientInternal.addListener("message", this.handleChat.bind(this));
                 // this.clientInternal.connect().catch(console.error);
                 try {
                     this.clientInternal.connect()
@@ -64,7 +60,7 @@ export class TwitchClientState {
 
         const first = args[0].toLowerCase()
 
-        const prefixArray = [paramStore.displayPrefix, paramStore.smallPrefix, paramStore.bigPrefix].map(x => '!' + x.toLowerCase())
+        const prefixArray = [paramStore.displayPrefix, paramStore.smallPrefix, paramStore.bigPrefix].map(x => '!' + x)
         console.log(prefixArray)
 
         if (!(prefixArray.includes(first))) {
@@ -72,13 +68,53 @@ export class TwitchClientState {
             return;
         }
 
-        if (onlyModsCanEdit && !hasEditPermissions) {
+        if (paramStore.onlyModCanEdit && !hasEditPermissions) {
             console.log("no edit permission");
             return;
         }
 
-        // handleArgs(args);
+        this.handleArgs(args);
     }
+
+    handleArgs(args: string[]) {
+        console.log("handleArgs:", args);
+
+        const first = args[0].toLowerCase()
+        // const fn = args[1];
+        // console.log(fn)
+
+        if (first == '!' + paramStore.displayPrefix) {
+            this.handleDisplayText(args);
+        }
+    }
+
+    handleDisplayText(args: string[]) {
+        // console.log("handleDisplayText", args)
+        const fn = args[1];
+        // console.log(fn)
+
+        switch (fn) {
+            case 'show':
+                {
+                    appStore.updateHeaderText({ hidden: false })
+                    break;
+                }
+            case 'hide':
+                {
+                    appStore.updateHeaderText({ hidden: true })
+                    break;
+                }
+            case 'set':
+                {
+                    const restArgString = args.slice(2).join(" ");
+                    appStore.updateHeaderText({ text: restArgString })
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+
 }
 
 export const TwitchClient = new TwitchClientState()
