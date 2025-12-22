@@ -35,6 +35,8 @@
 		"vite": "^7.2.6"
 	},
 	"dependencies": {
+		"date-fns": "^4.1.0",
+		"timrjs": "^4.0.0",
 		"tmi.js": "^1.8.5"
 	}
 }

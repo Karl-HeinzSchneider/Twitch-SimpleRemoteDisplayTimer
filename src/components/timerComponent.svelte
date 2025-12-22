@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { TimerState } from '../state/app.svelte';
-
 	let { state }: { state: TimerState } = $props();
 
 	const timerFormatted = '00:00:00';
@@ -10,7 +9,7 @@
 	<span></span>
 	<div class="timerText">{state.text.text}</div>
 	<div class="timerBox">
-		<span class="timerOverflow">999y999d</span>
+		<span class="timerOverflow"></span>
 		<span class="timer">
 			{timerFormatted}
 		</span>

@@ -13,6 +13,9 @@
 	<h2>Channel url parameter missing!</h2>
 	<div>Please add '?twitch=exampleTwitchChannel' to the URL</div>
 {:else}
+	{#if client}
+		<div>client</div>
+	{/if}
 	<Widget></Widget>
 {/if}
 

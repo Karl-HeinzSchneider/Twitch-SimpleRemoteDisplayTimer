@@ -22,6 +22,47 @@ export class UrlParamsState {
             return false;
         }
     })
+
+    onlyModCanEdit: boolean = $derived.by(() => {
+        const modValue = this.params.get('onlyMod')
+        if (modValue && modValue === 'false') {
+            return false;
+        }
+        else {
+            return true; // default
+        }
+    })
+
+
+    displayPrefix = $derived.by(() => {
+        const displayValue = this.params.get('prefixDisplay')
+        if (displayValue && displayValue != '') {
+            return displayValue;
+        }
+        else {
+            return 'display'; // default
+        }
+    })
+
+    smallPrefix = $derived.by(() => {
+        const smallValue = this.params.get('prefix')
+        if (smallValue && smallValue != '') {
+            return smallValue;
+        }
+        else {
+            return 'timer'; // default
+        }
+    })
+
+    bigPrefix = $derived.by(() => {
+        const bigValue = this.params.get('prefix2')
+        if (bigValue && bigValue != '') {
+            return bigValue;
+        }
+        else {
+            return 'bigtimer'; // default
+        }
+    })
 }
 
 export const UrlParamsStore = new UrlParamsState();
