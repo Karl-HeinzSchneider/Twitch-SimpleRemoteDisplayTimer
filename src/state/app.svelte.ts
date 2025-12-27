@@ -3,7 +3,7 @@ export interface TextState {
     color: string,
     hidden: boolean
 }
-const defaultTextState: TextState = { text: 'headertext', color: 'white', hidden: false }
+const defaultTextState: TextState = { text: 'headertext', color: '#4a9eff', hidden: false }
 
 export enum TimerType {
     Countdown = 'countdown',
@@ -62,6 +62,20 @@ export class AppState {
 
     updateHeaderText(newHeader: Partial<TextState>) {
         this.state.header = { ...this.state.header, ...newHeader }
+    }
+
+    updateSmallTimer(newTimer: Partial<TimerState>) {
+        this.state.smallTimer = { ...this.state.smallTimer, ...newTimer }
+    }
+    updateSmallTimerText(newText: Partial<TextState>) {
+        this.state.smallTimer.text = { ...this.state.smallTimer.text, ...newText }
+    }
+
+    updateBigTimer(newTimer: Partial<TimerState>) {
+        this.state.bigTimer = { ...this.state.bigTimer, ...newTimer }
+    }
+    updateBigTimerText(newText: Partial<TextState>) {
+        this.state.bigTimer.text = { ...this.state.bigTimer.text, ...newText }
     }
 }
 

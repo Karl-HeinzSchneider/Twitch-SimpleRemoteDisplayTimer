@@ -1,6 +1,7 @@
 import * as tmi from "tmi.js";
 import { UrlParamsStore } from "./urlparams.svelte";
-import { AppStore } from "./app.svelte";
+import { AppStore, type TextState, type TimerState } from "./app.svelte";
+import { parseInputToTimerUpdate } from "../helper/parseTimeString.svelte";
 const paramStore = UrlParamsStore
 const appStore = AppStore;
 
@@ -30,8 +31,6 @@ export class TwitchClientState {
     });
 
     constructor() {
-        // this.AppStore = AppStore;
-        console.log(appStore != null)
     }
 
     handleChat(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
@@ -83,8 +82,27 @@ export class TwitchClientState {
         // const fn = args[1];
         // console.log(fn)
 
-        if (first == '!' + paramStore.displayPrefix) {
+        if (first == ('!' + paramStore.displayPrefix)) {
             this.handleDisplayText(args);
+            return;
+        }
+
+        if (first == ('!' + paramStore.smallPrefix)) {
+            this.handleTimer(args, (u: Partial<TimerState>) => {
+                appStore.updateSmallTimer(u)
+            }, (u: Partial<TextState>) => {
+                appStore.updateSmallTimerText(u)
+            })
+            return;
+        }
+
+        if (first == ('!' + paramStore.bigPrefix)) {
+            this.handleTimer(args, (u: Partial<TimerState>) => {
+                appStore.updateBigTimer(u)
+            }, (u: Partial<TextState>) => {
+                appStore.updateBigTimerText(u)
+            })
+            return;
         }
     }
 
@@ -110,11 +128,61 @@ export class TwitchClientState {
                     appStore.updateHeaderText({ text: restArgString })
                     break;
                 }
+            case 'color':
+                {
+                    appStore.updateHeaderText({ color: args[2] || 'white' })
+                    break;
+                }
             default:
-                break;
+                { break; }
         }
     }
 
+    handleTimer(args: string[], updateFunc: (u: Partial<TimerState>) => void, updateTextFunc: (u: Partial<TextState>) => void) {
+        // console.log("handleTimer", args)
+        const fn = args[1].toLowerCase();
+        console.log(fn)
+
+        let update: Partial<TimerState> = {}
+
+        switch (fn) {
+            case 'show':
+                {
+                    update = { ...update, hidden: false }
+                    break;
+                }
+            case 'hide':
+                {
+                    update = { ...update, hidden: true }
+                    break;
+                }
+            case 'start':
+                {
+                    update = { ...update, paused: false }
+                    break;
+                }
+            case 'stop':
+                {
+                    update = { ...update, paused: true }
+                    break;
+                }
+            case 'set':
+                {
+                    update = parseInputToTimerUpdate(args[2])
+                    const restArgString = args.slice(3).join(" ");
+                    if (restArgString !== '') {
+                        const textUpdate: Partial<TextState> = { text: restArgString }
+                        updateTextFunc(textUpdate)
+                    }
+                    console.log(update)
+                    break;
+                }
+            default:
+                { break; }
+        }
+
+        updateFunc(update);
+    }
 }
 
 export const TwitchClient = new TwitchClientState()

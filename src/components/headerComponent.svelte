@@ -5,7 +5,7 @@
 </script>
 
 <div class="headerContainer {state.hidden ? 'hidden' : ''}">
-	<div class="text">{state.text}</div>
+	<div class="text" style={'color:' + state.color}>{state.text}</div>
 </div>
 
 <style>
@@ -24,7 +24,6 @@
 	}
 
 	.text {
-		color: #4a9eff;
 		font-size: 54px;
 		font-weight: 550;
 		text-align: center;

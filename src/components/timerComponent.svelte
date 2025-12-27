@@ -1,8 +1,25 @@
 <script lang="ts">
-	import type { TimerState } from '../state/app.svelte';
+	import { TimerType, type TimerState } from '../state/app.svelte';
 	let { state }: { state: TimerState } = $props();
 
-	const timerFormatted = '00:00:00';
+	// const timerFormatted = '00:00:00';
+	const timerFormatted = $derived.by(() => {
+		const timerType = state.timerType;
+		let str = '00:00:00';
+
+		if (timerType == TimerType.Countdown) {
+			if (state.paused) {
+				// const dur = formatDuration({ seconds: state.duration / 1000 });
+				// str = dur;
+			} else {
+			}
+		} else if (timerType == TimerType.Stopwatch) {
+		} else if (timerType == TimerType.Date) {
+		} else {
+		}
+
+		return str;
+	});
 </script>
 
 <div class="timerContainer {state.hidden ? 'hidden' : ''}">
